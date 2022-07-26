@@ -3,7 +3,7 @@ import sys
 from mysql.connector import Error
 from psycopg2.errors import Error as err
 from dotenv import load_dotenv
-sys.path.append('/home/neosoft/Documents/Python_assignment')
+sys.path.append('/home/neosoft/Downloads/Python_Assignments')
 from databases_connection import MySQL, PostGreSQL
 load_dotenv()
 
