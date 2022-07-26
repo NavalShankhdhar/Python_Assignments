@@ -3,7 +3,7 @@ import os
 import csv
 from fpdf import FPDF
 from dotenv import load_dotenv
-sys.path.append('/home/neosoft/Documents/Python_assignment')
+sys.path.append('/home/neosoft/Downloads/Python_Assignments')
 from databases_connection import MySQL, PostGreSQL
 load_dotenv()
 
