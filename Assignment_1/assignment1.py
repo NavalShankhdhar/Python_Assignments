@@ -42,7 +42,7 @@ class ConnectDatabase:
 
     # function to check if table is empty or not
     def check(self):
-        self.cursor.execute("SELECT COUNT(*) AS rowcount FROM MySQL_Games.games_info8")
+        self.cursor.execute("SELECT COUNT(*) AS rowcount FROM MySQL_Games.games_info")
         return self.cursor.fetchone()
 
 class MySQL(ConnectDatabase):
@@ -59,7 +59,7 @@ class MySQL(ConnectDatabase):
     # function to insert existing data from csv to MySQL database
     def insert_data(self, csv_file1, csv_file2):
         self.mysql_query = """
-                    INSERT INTO MySQL_Games.games_info8(
+                    INSERT INTO MySQL_Games.games_info(
                         Game_name,
                         Game_type,
                         Game_size,
@@ -78,7 +78,7 @@ class MySQL(ConnectDatabase):
     #function to insert new data to database
     def new_insert(self, new):
         self.cursor.execute("""
-                    INSERT INTO MySQL_Games.games_info8(
+                    INSERT INTO MySQL_Games.games_info(
                         Game_name,
                         Game_type,
                         Game_size,
@@ -103,7 +103,7 @@ class PostGreSQL(ConnectDatabase):
     # function to insert existing data from csv to Postgresql database
     def insert_data(self, csv_file1, csv_file2):
         self.psql_query = """
-                        INSERT INTO games_info8(
+                        INSERT INTO games_info(
                             Game_name,
                             Game_type,
                             Game_size,
@@ -124,7 +124,7 @@ class PostGreSQL(ConnectDatabase):
         self.connect = self.connect_database()
         self.cursor = self.connect.cursor()
         self.cursor.execute( """
-                        INSERT INTO games_info8(
+                        INSERT INTO games_info(
                             Game_name,
                             Game_type,
                             Game_size,
@@ -137,11 +137,11 @@ class PostGreSQL(ConnectDatabase):
 
 if __name__ == "__main__":
     #objects of CSV parse class
-    csv_ob1 = CsvParse("/home/neosoft/Desktop/Assignments_python/Python_Assignments/Assignment_1/games.csv", ",")
-    csv_ob2 = CsvParse("/home/neosoft/Desktop/Assignments_python/Python_Assignments/Assignment_1/games2.csv", ";")
+    csv_ob1 = CsvParse("games.csv", ",")
+    csv_ob2 = CsvParse("games2.csv", ";")
 
     mysql_query = """
-                    CREATE TABLE IF NOT EXISTS games_info8(
+                    CREATE TABLE IF NOT EXISTS games_info(
                         ID INT AUTO_INCREMENT PRIMARY KEY,
                         Game_name VARCHAR(50) NOT NULL,
                         Game_type VARCHAR(25) NOT NULL,
@@ -149,7 +149,7 @@ if __name__ == "__main__":
                         Game_mode VARCHAR(20)
                 )"""
     psql_query = """
-                    CREATE TABLE IF NOT EXISTS games_info8(
+                    CREATE TABLE IF NOT EXISTS games_info(
                         ID SERIAL PRIMARY KEY,
                         Game_name VARCHAR(50) NOT NULL,
                         Game_type VARCHAR(25) NOT NULL,
