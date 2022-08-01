@@ -1,0 +1,4 @@
+mysql-connector-python==8.0.29
+psycopg2==2.9.3
+psycopg2_binary==2.9.3
+python-dotenv==0.20.0
