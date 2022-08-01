@@ -35,15 +35,13 @@ class ConnectDatabase:
         self.connect = self.connect_database()
         self.cursor = self.connect.cursor()
 
-    #function to create table in MySQL and PostgreSQL databases
-    def create_table(self, query):
-        self.cursor.execute(query)
-        self.connect.commit()
-
     # function to check if table is empty or not
-    def check(self):
-        self.cursor.execute("SELECT COUNT(*) AS rowcount FROM MySQL_Games.games_info8")
-        return self.cursor.fetchone()
+    def is_empty(self):
+        self.cursor.execute("SELECT COUNT(*) AS rowcount FROM MySQL_Games.games_info")
+        if self.cursor.fetchone()[0]:
+            return False
+        else:
+            return True
 
 class MySQL(ConnectDatabase):
     #function to connect to MySQL server
@@ -56,10 +54,22 @@ class MySQL(ConnectDatabase):
         )
         return mysql_conn
 
+    #function to create table in MySQL database
+    def create_table(self):
+        self.cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS games_info(
+                        ID INT AUTO_INCREMENT PRIMARY KEY,
+                        Game_name VARCHAR(50) NOT NULL,
+                        Game_type VARCHAR(25) NOT NULL,
+                        Game_size FLOAT,
+                        Game_mode VARCHAR(20)
+                )""")
+        self.connect.commit()
+
     # function to insert existing data from csv to MySQL database
     def insert_data(self, csv_file1, csv_file2):
         self.mysql_query = """
-                    INSERT INTO MySQL_Games.games_info8(
+                    INSERT INTO MySQL_Games.games_info(
                         Game_name,
                         Game_type,
                         Game_size,
@@ -78,7 +88,7 @@ class MySQL(ConnectDatabase):
     #function to insert new data to database
     def new_insert(self, new):
         self.cursor.execute("""
-                    INSERT INTO MySQL_Games.games_info8(
+                    INSERT INTO MySQL_Games.games_info(
                         Game_name,
                         Game_type,
                         Game_size,
@@ -100,10 +110,23 @@ class PostGreSQL(ConnectDatabase):
             port = '5432'
         )
         return psql_conn
+
+    #function to create table in Postgresql database
+    def create_table(self):
+        self.cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS games_info(
+                        ID SERIAL PRIMARY KEY,
+                        Game_name VARCHAR(50) NOT NULL,
+                        Game_type VARCHAR(25) NOT NULL,
+                        Game_size FLOAT,
+                        Game_mode VARCHAR(20)
+                )""")
+        self.connect.commit()
+
     # function to insert existing data from csv to Postgresql database
     def insert_data(self, csv_file1, csv_file2):
         self.psql_query = """
-                        INSERT INTO games_info8(
+                        INSERT INTO games_info(
                             Game_name,
                             Game_type,
                             Game_size,
@@ -124,7 +147,7 @@ class PostGreSQL(ConnectDatabase):
         self.connect = self.connect_database()
         self.cursor = self.connect.cursor()
         self.cursor.execute( """
-                        INSERT INTO games_info8(
+                        INSERT INTO games_info(
                             Game_name,
                             Game_type,
                             Game_size,
@@ -137,43 +160,27 @@ class PostGreSQL(ConnectDatabase):
 
 if __name__ == "__main__":
     #objects of CSV parse class
-    csv_ob1 = CsvParse("/home/neosoft/Desktop/Assignments_python/Python_Assignments/Assignment_1/games.csv", ",")
-    csv_ob2 = CsvParse("/home/neosoft/Desktop/Assignments_python/Python_Assignments/Assignment_1/games2.csv", ";")
+    csv_ob1 = CsvParse("games.csv", ",")
+    csv_ob2 = CsvParse("games2.csv", ";")
 
-    mysql_query = """
-                    CREATE TABLE IF NOT EXISTS games_info8(
-                        ID INT AUTO_INCREMENT PRIMARY KEY,
-                        Game_name VARCHAR(50) NOT NULL,
-                        Game_type VARCHAR(25) NOT NULL,
-                        Game_size FLOAT,
-                        Game_mode VARCHAR(20)
-                )"""
-    psql_query = """
-                    CREATE TABLE IF NOT EXISTS games_info8(
-                        ID SERIAL PRIMARY KEY,
-                        Game_name VARCHAR(50) NOT NULL,
-                        Game_type VARCHAR(25) NOT NULL,
-                        Game_size FLOAT,
-                        Game_mode VARCHAR(20)
-                )"""
     try:
         # mysql connectionand table creation
         mysql_ob = MySQL(os.getenv("host"), os.getenv("mysqluser"), os.getenv("password"), 'MySQL_Games')
         psql_ob = PostGreSQL(os.getenv("host"), os.getenv("psqluser"), os.getenv("password"), 'allgames')
-        mysql_ob.create_table(mysql_query)
-        psql_ob.create_table(psql_query)
+        mysql_ob.create_table()
+        psql_ob.create_table()
     except Error as e:
         print("Cannot connect to MySQL database or unable to create MySQL table ", e)
     except error as er:
         print("Cannot connect to Postgresql database or unable to create Postgresql database ", er)
 
     # to check if table is empty
-    if mysql_ob.check()[0] == 0:
+    if mysql_ob.is_empty():
         try:
             mysql_ob.insert_data(csv_ob1.read_csv(), csv_ob2.read_csv())
             read_csv1 = csv_ob1.read_csv()
             readcsv2 = csv_ob2.read_csv()
-            # to check the Game_size column fields that are empty and are float type and return 0 for those fields
+            # to check the (Game_size) column cells that are empty and are float type, so return 0 for those cells
             for data in read_csv1:
                 if data[2] == '':
                     data[2] = 0
