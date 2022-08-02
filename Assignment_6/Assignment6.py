@@ -1,6 +1,5 @@
 from logging import exception
 import os
-import sys
 
 import re
 import tweepy
