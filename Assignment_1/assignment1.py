@@ -35,7 +35,7 @@ class ConnectDatabase:
         self.cursor = self.connect.cursor()
     # function to check if table is empty or not
     def is_empty(self):
-        self.cursor.execute("SELECT COUNT(*) AS rowcount FROM student_info.student_data5")
+        self.cursor.execute("SELECT COUNT(*) AS rowcount FROM student_info.student_data")
         if self.cursor.fetchone()[0]:
             return False
         else:
@@ -55,7 +55,7 @@ class MySQL(ConnectDatabase):
     #function to create table in MySQL database
     def create_table(self):
         self.cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS student_data5(
+                    CREATE TABLE IF NOT EXISTS student_data(
                         ID INT AUTO_INCREMENT PRIMARY KEY,
                         Name VARCHAR(50) NOT NULL,
                         Course VARCHAR(25) NOT NULL,
@@ -66,7 +66,7 @@ class MySQL(ConnectDatabase):
     # function to insert existing data from first csv to MySQL database
     def insert_data1(self, csv_file):
         self.mysql_query = """
-                    INSERT INTO student_info.student_data5(
+                    INSERT INTO student_info.student_data(
                         Name,
                         Course,
                         Percentage,
@@ -80,7 +80,7 @@ class MySQL(ConnectDatabase):
     # function to insert existing data from second csv to MySQL database
     def insert_data2(self, csv_file):
         self.mysql_query = """
-                    INSERT INTO student_info.student_data5(
+                    INSERT INTO student_info.student_data(
                         Name,
                         Course,
                         Percentage,
@@ -95,7 +95,7 @@ class MySQL(ConnectDatabase):
     #function to insert new data to database
     def new_insert(self, new):
         self.cursor.execute("""
-                    INSERT INTO student_info.student_data5(
+                    INSERT INTO student_info.student_data(
                         Name,
                         Course,
                         Percentage,
@@ -120,7 +120,7 @@ class PostGreSQL(ConnectDatabase):
     #function to create table in Postgresql database
     def create_table(self):
         self.cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS student_data5(
+                    CREATE TABLE IF NOT EXISTS student_data(
                         ID SERIAL PRIMARY KEY,
                         Name VARCHAR(50) NOT NULL,
                         Course VARCHAR(25) NOT NULL,
@@ -131,7 +131,7 @@ class PostGreSQL(ConnectDatabase):
     # function to insert existing data from first csv to Postgresql database
     def insert_data1(self, csv_file):
         self.psql_query = """
-                        INSERT INTO student_data5(
+                        INSERT INTO student_data(
                             Name,
                             Course,
                             Percentage,
@@ -145,7 +145,7 @@ class PostGreSQL(ConnectDatabase):
     # function to insert existing data from second csv to Postgresql database
     def insert_data2(self, csv_file):
         self.psql_query = """
-                        INSERT INTO student_data5(
+                        INSERT INTO student_data(
                             Name,
                             Course,
                             Percentage,
@@ -162,7 +162,7 @@ class PostGreSQL(ConnectDatabase):
         self.connect = self.connect_database()
         self.cursor = self.connect.cursor()
         self.cursor.execute( """
-                        INSERT INTO student_data5(
+                        INSERT INTO student_data(
                             Name,
                             Course,
                             Percentage,
@@ -175,8 +175,8 @@ class PostGreSQL(ConnectDatabase):
 
 if __name__ == "__main__":
     #objects of CSV parse class
-    csv_ob1 = CsvParse("/home/neosoft/Desktop/Assignments_python/Python_Assignments/Assignment_1/student1.csv", ",")
-    csv_ob2 = CsvParse("/home/neosoft/Desktop/Assignments_python/Python_Assignments/Assignment_1/student2.csv", ";")
+    csv_ob1 = CsvParse("student1.csv", ",")
+    csv_ob2 = CsvParse("student2.csv", ";")
 
     try:
         # mysql connection and table creation
