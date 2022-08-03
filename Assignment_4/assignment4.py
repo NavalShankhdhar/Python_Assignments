@@ -2,6 +2,7 @@ import os
 from logging import exception
 
 from dotenv import load_dotenv
+
 from ..Assignment_1.assignment1 import MySQL, PostGreSQL
 
 load_dotenv()
@@ -17,7 +18,14 @@ class MysqlConnection(MySQL):
         self.connect.commit()
 
     def create_mtable3(self):
-        self.cursor.execute('CREATE TABLE IF NOT EXISTS BOOKS (ID INT AUTO_INCREMENT PRIMARY KEY, CATEGORY_ID INT, BOOK_NAME VARCHAR(255) NOT NULL, AUTHOR_ID INT, CONSTRAINT category_name FOREIGN KEY(category_id) REFERENCES CATEGORY(ID), CONSTRAINT author_name FOREIGN KEY (author_id) REFERENCES USER_INFO(ID))')
+        self.cursor.execute("""CREATE TABLE IF NOT EXISTS BOOKS (
+                                       ID INT AUTO_INCREMENT PRIMARY KEY,
+                                       CATEGORY_ID INT,
+                                       BOOK_NAME VARCHAR(255) NOT NULL,
+                                       AUTHOR_ID INT,
+                                       CONSTRAINT category_name FOREIGN KEY(category_id) REFERENCES CATEGORY(ID),
+                                       CONSTRAINT author_name FOREIGN KEY (author_id) REFERENCES USER_INFO(ID)
+                                       )""")
         self.connect.commit()
 
     def insert_rows1(self, values):
@@ -47,7 +55,14 @@ class PostgresqlConnection(PostGreSQL):
         self.connect.commit()
 
     def create_ptable3(self):
-        self.cursor.execute('CREATE TABLE IF NOT EXISTS BOOKS (ID SERIAL PRIMARY KEY, CATEGORY_ID INT, BOOK_NAME VARCHAR(255) NOT NULL, AUTHOR_ID INT, CONSTRAINT category_name FOREIGN KEY(category_id) REFERENCES CATEGORY(ID), CONSTRAINT author_name FOREIGN KEY (author_id) REFERENCES USER_INFO(ID))')
+        self.cursor.execute("""CREATE TABLE IF NOT EXISTS BOOKS (
+                                       ID SERIAL PRIMARY KEY,
+                                       CATEGORY_ID INT,
+                                       BOOK_NAME VARCHAR(255) NOT NULL,
+                                       AUTHOR_ID INT,
+                                       CONSTRAINT category_name FOREIGN KEY(category_id) REFERENCES CATEGORY(ID),
+                                       CONSTRAINT author_name FOREIGN KEY (author_id) REFERENCES USER_INFO(ID)
+                                       )""")
         self.connect.commit()
 
     def insert_rows1(self, values):
@@ -67,8 +82,8 @@ class PostgresqlConnection(PostGreSQL):
 
 if __name__ == '__main__':
     try:
-        mysql_ob = MysqlConnection(os.getenv("host"), os.getenv("mysqluser"), os.getenv("password"), 'ass4')
-        psql_ob = PostgresqlConnection(os.getenv("host"), os.getenv("psqluser"), os.getenv("password"), 'psqlass4')
+        mysql_ob = MysqlConnection(os.getenv("host"), os.getenv("mysqluser"), os.getenv("password"), 'books')
+        psql_ob = PostgresqlConnection(os.getenv("host"), os.getenv("psqluser"), os.getenv("password"), 'psqlbooks')
         
         mysql_ob.create_mtable1()
         mysql_ob.create_mtable2()
