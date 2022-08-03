@@ -3,9 +3,11 @@ from logging import exception
 
 import csv
 from dotenv import load_dotenv
+
 from ..Assignment_1.assignment1 import MySQL, PostGreSQL
 
 load_dotenv()
+
 choice = int(input("\nEnter '1' to read data from MySQL database\nENter '2' to read data from PostgreSQL database\nYour choice: "))
 if choice == 1:
     mysql_ob = MySQL(os.getenv("host"), os.getenv("mysqluser"), os.getenv("password"), 'MySQL_Games')
