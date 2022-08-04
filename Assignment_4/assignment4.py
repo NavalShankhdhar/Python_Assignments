@@ -10,36 +10,36 @@ load_dotenv()
 class MysqlConnection(MySQL):
 
     def create_mtable1(self):
-        self.cursor.execute('CREATE TABLE IF NOT EXISTS USER_INFO ( ID INT AUTO_INCREMENT PRIMARY KEY, NAME VARCHAR(20) NOT NULL, PASSWORD VARCHAR (20) NOT NULL, EMAIL VARCHAR(20) NOT NULL)')
+        self.cursor.execute('CREATE TABLE IF NOT EXISTS user_info ( id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(20) NOT NULL, password VARCHAR (20) NOT NULL, email VARCHAR(20) NOT NULL)')
         self.connect.commit()
 
     def create_mtable2(self):
-        self.cursor.execute('CREATE TABLE IF NOT EXISTS CATEGORY (ID INT AUTO_INCREMENT PRIMARY KEY, CATEGORY_NAME VARCHAR(25) NOT NULL UNIQUE)')
+        self.cursor.execute('CREATE TABLE IF NOT EXISTS category (id INT AUTO_INCREMENT PRIMARY KEY, category_name VARCHAR(25) NOT NULL UNIQUE)')
         self.connect.commit()
 
     def create_mtable3(self):
-        self.cursor.execute("""CREATE TABLE IF NOT EXISTS BOOKS (
-                                       ID INT AUTO_INCREMENT PRIMARY KEY,
-                                       CATEGORY_ID INT,
-                                       BOOK_NAME VARCHAR(255) NOT NULL,
-                                       AUTHOR_ID INT,
-                                       CONSTRAINT category_name FOREIGN KEY(category_id) REFERENCES CATEGORY(ID),
-                                       CONSTRAINT author_name FOREIGN KEY (author_id) REFERENCES USER_INFO(ID)
+        self.cursor.execute("""CREATE TABLE IF NOT EXISTS books (
+                                       id INT AUTO_INCREMENT PRIMARY KEY,
+                                       category_id INT,
+                                       book_name VARCHAR(255) NOT NULL,
+                                       author_id INT,
+                                       CONSTRAINT category_name FOREIGN KEY(category_id) REFERENCES category(id),
+                                       CONSTRAINT author_name FOREIGN KEY (author_id) REFERENCES user_info(id)
                                        )""")
         self.connect.commit()
 
     def insert_rows1(self, values):
-        self.cursor.execute('INSERT INTO USER_INFO (NAME, PASSWORD, EMAIL) VALUES (%s, %s, %s)', tuple(values))
+        self.cursor.execute('INSERT INTO user_info (name, password, email) VALUES (%s, %s, %s)', tuple(values))
         self.connect.commit()
         self.connect.close()
 
     def insert_rows2(self, values):
-        self.cursor.execute('INSERT INTO CATEGORY (CATEGORY_NAME) VALUES (%s)', tuple(values))
+        self.cursor.execute('INSERT INTO category (category_name) VALUES (%s)', tuple(values))
         self.connect.commit()
         self.connect.close()
 
     def insert_rows3(self, values):
-        self.cursor.execute('INSERT INTO BOOKS (CATEGORY_ID, BOOK_NAME, AUTHOR_ID) VALUES (%s, %s, %s)', tuple(values))
+        self.cursor.execute('INSERT INTO books (category_id, book_name, author_id) VALUES (%s, %s, %s)', tuple(values))
         self.connect.commit()
         self.connect.close()
 
@@ -47,43 +47,43 @@ class MysqlConnection(MySQL):
 class PostgresqlConnection(PostGreSQL):
 
     def create_ptable1(self):
-        self.cursor.execute('CREATE TABLE IF NOT EXISTS USER_INFO (ID SERIAL PRIMARY KEY, NAME VARCHAR(20) NOT NULL, PASSWORD VARCHAR(20) NOT NULL, EMAIL VARCHAR(20) NOT NULL)')
+        self.cursor.execute('CREATE TABLE IF NOT EXISTS user_info (id SERIAL PRIMARY KEY, name VARCHAR(20) NOT NULL, password VARCHAR(20) NOT NULL, email VARCHAR(20) NOT NULL)')
         self.connect.commit()
 
     def create_ptable2(self):
-        self.cursor.execute('CREATE TABLE IF NOT EXISTS CATEGORY (ID SERIAL PRIMARY KEY, CATEGORY_NAME VARCHAR(25) NOT NULL UNIQUE)')
+        self.cursor.execute('CREATE TABLE IF NOT EXISTS category (id SERIAL PRIMARY KEY, category_name VARCHAR(25) NOT NULL UNIQUE)')
         self.connect.commit()
 
     def create_ptable3(self):
-        self.cursor.execute("""CREATE TABLE IF NOT EXISTS BOOKS (
-                                       ID SERIAL PRIMARY KEY,
-                                       CATEGORY_ID INT,
-                                       BOOK_NAME VARCHAR(255) NOT NULL,
-                                       AUTHOR_ID INT,
-                                       CONSTRAINT category_name FOREIGN KEY(category_id) REFERENCES CATEGORY(ID),
-                                       CONSTRAINT author_name FOREIGN KEY (author_id) REFERENCES USER_INFO(ID)
+        self.cursor.execute("""CREATE TABLE IF NOT EXISTS books (
+                                       id SERIAL PRIMARY KEY,
+                                       category_id INT,
+                                       book_name VARCHAR(255) NOT NULL,
+                                       author_id INT,
+                                       CONSTRAINT category_name FOREIGN KEY(category_id) REFERENCES category(id),
+                                       CONSTRAINT author_name FOREIGN KEY (author_id) REFERENCES user_info(id)
                                        )""")
         self.connect.commit()
 
     def insert_rows1(self, values):
-        self.cursor.execute('INSERT INTO USER_INFO (NAME, PASSWORD, EMAIL) VALUES (%s, %s, %s)', tuple(values))
+        self.cursor.execute('INSERT INTO user_info (name, password, email) VALUES (%s, %s, %s)', tuple(values))
         self.connect.commit()
         self.connect.close()
 
     def insert_rows2(self, values):
-        self.cursor.execute('INSERT INTO CATEGORY (CATEGORY_NAME) VALUES (%s)', tuple(values))
+        self.cursor.execute('INSERT INTO category (category_name) VALUES (%s)', tuple(values))
         self.connect.commit()
         self.connect.close()
         
     def insert_rows3(self, values):
-        self.cursor.execute('INSERT INTO BOOKS (CATEGORY_ID, BOOK_NAME, AUTHOR_ID) VALUES (%s, %s, %s)', tuple(values))
+        self.cursor.execute('INSERT INTO books (category_id, book_name, author_id) VALUES (%s, %s, %s)', tuple(values))
         self.connect.commit()
         self.connect.close()
 
 if __name__ == '__main__':
     try:
         mysql_ob = MysqlConnection(os.getenv("host"), os.getenv("mysqluser"), os.getenv("password"), 'books')
-        psql_ob = PostgresqlConnection(os.getenv("host"), os.getenv("psqluser"), os.getenv("password"), 'psqlbooks')
+        psql_ob = PostgresqlConnection(os.getenv("host"), os.getenv("psqluser"), os.getenv("password"), 'psql_books')
         
         mysql_ob.create_mtable1()
         mysql_ob.create_mtable2()
