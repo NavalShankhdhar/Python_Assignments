@@ -48,12 +48,12 @@ if __name__ == "__main__":
     choice = int(input("\nEnter 1 to create pdf from MySql database\nEnter 2 to create pdf from Postgresql database\nEnter 3 to create pdf from csv file\n\nYour choice: "))
     if choice == 1:
         mysql_ob = MySQL(os.getenv("host"), os.getenv("mysqluser"), os.getenv("password"), 'student_info')
-        mysql_ob.cursor.execute('SELECT Name, Course, Percentage, City FROM student_info.student_data4')
+        mysql_ob.cursor.execute('SELECT name, course, percentage, city FROM student_info.student_data4')
         result = mysql_ob.cursor.fetchall()
 
     elif choice == 2:
         psql_ob = PostGreSQL(os.getenv("host"), os.getenv("psqluser"), os.getenv("password"), 'student_info')
-        psql_ob.cursor.execute('SELECT Name, Course, Percentage, City FROM student_data4')
+        psql_ob.cursor.execute('SELECT name, course, percentage, city FROM student_data4')
         result = psql_ob.cursor.fetchall()
 
     elif choice == 3:
@@ -67,7 +67,7 @@ if __name__ == "__main__":
         pdf = PDF()
         pdf.add_page()
         pdf.set_font("Times", size = 15)
-        table_col = ("Name", "Course", "Percentage", "City")
+        table_col = ("name", "course", "percentage", "city")
         pdf.create_pdf(result, table_col)
     except Exception as e:
         logging.error(e)
