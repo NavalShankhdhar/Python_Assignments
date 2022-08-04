@@ -56,21 +56,21 @@ class MySQL(ConnectDatabase):
     def create_table(self):
         self.cursor.execute("""
                     CREATE TABLE IF NOT EXISTS student_data(
-                        ID INT AUTO_INCREMENT PRIMARY KEY,
-                        Name VARCHAR(50) NOT NULL,
-                        Course VARCHAR(25) NOT NULL,
-                        Percentage FLOAT,
-                        City VARCHAR(20)
+                        student_id INT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(50) NOT NULL,
+                        course VARCHAR(25) NOT NULL,
+                        percentage FLOAT,
+                        city VARCHAR(20)
                 )""")
         self.connect.commit()
     # function to insert existing data from first csv to MySQL database
     def insert_data1(self, csv_file):
         self.mysql_query = """
                     INSERT INTO student_info.student_data(
-                        Name,
-                        Course,
-                        Percentage,
-                        City
+                        name,
+                        course,
+                        percentage,
+                        city
                         )
                     VALUES (%s,%s,NULLIF(%s,''),NULLIF(%s,''))
                 """
@@ -81,10 +81,10 @@ class MySQL(ConnectDatabase):
     def insert_data2(self, csv_file):
         self.mysql_query = """
                     INSERT INTO student_info.student_data(
-                        Name,
-                        Course,
-                        Percentage,
-                        City
+                        name,
+                        course,
+                        percentage,
+                        city
                         )
                     VALUES (%s,%s,NULLIF(%s,''),NULLIF(%s,''))
                 """
@@ -96,10 +96,10 @@ class MySQL(ConnectDatabase):
     def new_insert(self, new):
         self.cursor.execute("""
                     INSERT INTO student_info.student_data(
-                        Name,
-                        Course,
-                        Percentage,
-                        City
+                        name,
+                        course,
+                        percentage,
+                        city
                         )
                     VALUES (%s,%s,NULLIF(%s,''),NULLIF(%s,''))
                 """, tuple(new))
@@ -121,21 +121,21 @@ class PostGreSQL(ConnectDatabase):
     def create_table(self):
         self.cursor.execute("""
                     CREATE TABLE IF NOT EXISTS student_data(
-                        ID SERIAL PRIMARY KEY,
-                        Name VARCHAR(50) NOT NULL,
-                        Course VARCHAR(25) NOT NULL,
-                        Percentage FLOAT,
-                        City VARCHAR(20)
+                        student_id SERIAL PRIMARY KEY,
+                        name VARCHAR(50) NOT NULL,
+                        course VARCHAR(25) NOT NULL,
+                        percentage FLOAT,
+                        city VARCHAR(20)
                 )""")
         self.connect.commit()
     # function to insert existing data from first csv to Postgresql database
     def insert_data1(self, csv_file):
         self.psql_query = """
                         INSERT INTO student_data(
-                            Name,
-                            Course,
-                            Percentage,
-                            City
+                            name,
+                            course,
+                            percentage,
+                            city
                             ) 
                         VALUES (%s,%s,NULLIF(%s,0.0),NULLIF(%s,''))
                     """
@@ -146,10 +146,10 @@ class PostGreSQL(ConnectDatabase):
     def insert_data2(self, csv_file):
         self.psql_query = """
                         INSERT INTO student_data(
-                            Name,
-                            Course,
-                            Percentage,
-                            City
+                            name,
+                            course,
+                            percentage,
+                            city
                             ) 
                         VALUES (%s,%s,NULLIF(%s,0.0),NULLIF(%s,''))
                     """
@@ -163,10 +163,10 @@ class PostGreSQL(ConnectDatabase):
         self.cursor = self.connect.cursor()
         self.cursor.execute( """
                         INSERT INTO student_data(
-                            Name,
-                            Course,
-                            Percentage,
-                            City
+                            name,
+                            course,
+                            percentage,
+                            city
                             ) 
                         VALUES (%s,%s,NULLIF(%s,0.0),NULLIF(%s,''))
                     """, tuple(new))
