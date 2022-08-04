@@ -13,23 +13,23 @@ load_dotenv()
 class MysqlConnection(MySQL):
 
     def create_table(self):
-        self.cursor.execute("""CREATE TABLE IF NOT EXISTS TWITTER_INFO(
-                                    User_ID VARCHAR(255) ,
-                                    User_name VARCHAR(20) NOT NULL,
-                                    TWEET VARCHAR(255),
-                                    Date VARCHAR(25),
-                                    Time VARCHAR(25),
-                                    Favorites INT,
-                                    Retweets INT,
-                                    Source VARCHAR(50),
-                                    URL VARCHAR(255))
+        self.cursor.execute("""CREATE TABLE IF NOT EXISTS twitter_info(
+                                    user_id VARCHAR(255) ,
+                                    user_name VARCHAR(20) NOT NULL,
+                                    tweet VARCHAR(255),
+                                    date VARCHAR(25),
+                                    time VARCHAR(25),
+                                    favorites INT,
+                                    retweets INT,
+                                    source VARCHAR(50),
+                                    url VARCHAR(255))
                             """)
         self.connect.commit()
 
     def insert_row(self, tweet):
         self.connect = self.connect_database()
         self.cursor = self.connect.cursor()
-        self.cursor.execute("""INSERT INTO TWITTER_INFO(User_ID, User_name, TWEET, Date, Time, Favorites, Retweets, Source, URL) 
+        self.cursor.execute("""INSERT INTO twitter_info(user_id, user_name, tweet, date, time, favorites, retweets, source, url) 
                                 VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)""", tuple(tweet))
         self.connect.commit()
         self.cursor.close()
@@ -38,23 +38,23 @@ class MysqlConnection(MySQL):
 class PostgresqlConnection(PostGreSQL):
     # function to create table in MySQL database
     def create_table(self):
-        self.cursor.execute("""CREATE TABLE IF NOT EXISTS TWITTER_INFO(
-                                    User_ID VARCHAR(255),
-                                    User_name VARCHAR(20) NOT NULL,
-                                    TWEET VARCHAR(255),
-                                    Date VARCHAR(25),
-                                    Time VARCHAR(25),
-                                    Favorites INT,
-                                    Retweets INT,
-                                    Source VARCHAR(50),
-                                    URL VARCHAR(255))
+        self.cursor.execute("""CREATE TABLE IF NOT EXISTS twitter_info(
+                                    user_id VARCHAR(255),
+                                    user_name VARCHAR(20) NOT NULL,
+                                    tweet VARCHAR(255),
+                                    date VARCHAR(25),
+                                    time VARCHAR(25),
+                                    favorites INT,
+                                    retweets INT,
+                                    source VARCHAR(50),
+                                    url VARCHAR(255))
                             """)
         self.connect.commit()
     # function to insert data in MySQL table
     def insert_row(self, tweet):
         self.connect = self.connect_database()
         self.cursor = self.connect.cursor()
-        self.cursor.execute("""INSERT INTO TWITTER_INFO(User_ID, User_name, TWEET, Date, Time, Favorites, Retweets, Source, URL)
+        self.cursor.execute("""INSERT INTO twitter_info(user_id, user_name, tweet, date, time, favorites, retweets, source, url)
                                 VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)""", tuple(tweet))
         self.connect.commit()
         self.cursor.close()
